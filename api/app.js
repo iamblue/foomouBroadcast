@@ -57,28 +57,29 @@ var tmp ;
 
 
 io.sockets.on('connection', function (socket) {
+  // setTimeout (function() { 
+  //   socket.emit('news', { g0v: '1231231'});
+  // },1000)
   setTimeout (function() { 
-    socket.emit('news', { g0v: '1231231'});
-  },1000)
-  bot.addListener("message", function(from, to, text, msg) {
-    setTimeout (function() { 
-      request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {  
-        // console.log(r)
-        oldmem = r.body
-        // console.log(oldmem)
-        if (r.body[0] && r.body[0].content && tmp != r.body[r.body.length-1].content[0]){
-          socket.emit('news', { main: r.body[r.body.length-1].content[0] });          
-          tmp = r.body[r.body.length-1].content[0];
+    request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {  
+      // console.log(r)
+      oldmem = r.body
+      // console.log(oldmem)
+      if (r.body[0] && r.body[0].content && tmp != r.body[r.body.length-1].content[0]){
+        socket.emit('news', { main: r.body[r.body.length-1].content[0] });          
+        tmp = r.body[r.body.length-1].content[0];
+      }else{
+        if (tmp){
+          console.log(tmp)
+          socket.emit('news', { main: tmp});
         }else{
-          if (tmp){
-            console.log(tmp)
-            socket.emit('news', { main: tmp});
-          }else{
-            socket.emit('news', { main: ''});
-          }
+          socket.emit('news', { main: ''});
         }
-      })
+      }
+    })
    }, 1000);
+  bot.addListener("message", function(from, to, text, msg) {
+    
     socket.emit('news', { g0v: from+' : '+text });
     socket.on('sos', function (data) {
       socket.broadcast.emit('sos',{p:data.p, msg:data.msg, icon:data.icon});
