@@ -1,0 +1,78 @@
+@import 'nib'
+@import 'nib/gradients'
+
+
+//fonts module
+@font-face
+  font-family: myFirstFont
+  src: url(sansation_light.woff)
+
+@font-face 
+  font-family: 'Lato'
+  font-style: normal
+  font-weight: 100
+  src: local('Lato Hairline'), local('Lato-Hairline'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/Kom15zUm24dIPfIRiNogNuvvDin1pK8aKteLpeZ5c0A.woff) format('woff')
+
+
+
+//初始化
+
+* 
+  margin: 0px
+  padding: 0px 
+
+*:focus 
+  outline: none
+
+body
+  padding:0px
+  margin:0px
+  width: 100%
+  height:100%
+  background-size:cover 
+  // background-image:url('/img/bk.png')
+  font-size: 14px
+  color: #fff
+  // overflow-x: hidden
+  // overflow-y: scroll
+li 
+  text-decoration:none
+ul 
+  list-style:none
+button
+  appearance: button
+
+
+//==================================
+//medium editor module content style
+//==================================
+
+p 
+  font-family: Comic Sans MS,arial,helvetica,sans-serif
+  color:#777
+  line-height:1.5em
+  font-size:18px
+h4
+  line-height:1.2em
+  font-size:24px
+  font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,Comic Sans MS,arial,helvetica,sans-serif;
+  // font-family: Comic Sans MS,arial,helvetica,sans-serif
+  color:#444
+h3
+  font-size:28px
+  line-height:1.2em
+  font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,Comic Sans MS,arial,helvetica,sans-serif;
+  // font-family: Comic Sans MS,arial,helvetica,sans-serif
+  color:#333
+h2
+  font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,Comic Sans MS,arial,helvetica,sans-serif;
+  color:#000
+h1
+  font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,Comic Sans MS,arial,helvetica,sans-serif;
+  color:#000
+  
+i 
+  color:#e0e0e0
+i:hover
+  animation: changei 1s ease-in-out
+  color:#333

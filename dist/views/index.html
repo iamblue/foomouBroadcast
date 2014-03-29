@@ -1,0 +1,58 @@
+<div id="product" class="produter" product ng-class="{
+'close' : close,'movetop' : movetop}">
+  <a class="main" ng-class="{'close':close,'movetop':movetop}"> 
+    <div class="content"></div>
+    <div class="biglogoFrame" ng-class="{
+      'hide': close
+    }">  
+      <img src="/img/logo.svg">
+    </div>
+    <div class="chooseLawerCategoryFrame" ng-show="chooseLawerCategory">
+      <ul>
+        <li ng-click="gomainMap()">123</li>
+        <li ng-click="gomainMap()">456</li>
+        <li ng-click="gomainMap()">789</li>
+        <li ng-click="gomainMap()">111</li>
+        <!-- <li>222</li> -->
+      </ul>
+    </div>
+  </a>
+  <div class="sub first" ng-class="{
+    'close':close
+  }"
+  >
+    <div class="content"></div>
+    <p><span>網站說明</span></p>
+    <div class="sub even" ng-class="{
+      'close':close
+    }">
+      <p><span><a ng-click="closeit()">民眾登入</a></span></p>
+      <div class="content"></div>
+      <div class="sub odd" ng-class="{
+        'close':close
+      }">
+        <p><span>律師登入</span></p>
+        <div class="content"></div>
+        
+        <div class="sub even" ng-class="{
+          'close':close
+        }">
+          <div class="content"></div>
+          <p></p>
+          <div class="sub odd" ng-class="{
+            'close':close
+          }">
+            <div class="content"></div>
+            <p></p>
+            <div class="sub even last" ng-class="{
+              'close':close
+            }">
+              <div class="content"></div>
+              <p><a ng-click="removecloseit()">123</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

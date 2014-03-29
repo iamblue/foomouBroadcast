@@ -1,0 +1,44 @@
+<!doctype html>
+<html ng-app="law580App" ng-controller="mainCtrl">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>law580</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+      <link rel="stylesheet" href="styles/783d96a8.main.css"/>
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  </head>
+  <body>
+    <div class="bodyFr" id="bodyFr">
+      <div ui-view=""></div>
+    </div>
+    <!-- <div class="drawer_container">
+    </div>
+    <div class="snap_container" id="snap_container">
+    </div> -->
+    <!-- Add your site or application content here -->
+    <script>
+       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');
+    </script>
+    <script>
+      var bodyFr = document.getElementById('bodyFr')
+      if (window.innerHeight > 480)
+        bodyFr.style.height = window.innerHeight+'px'
+      else
+        bodyFr.style.height = '480px'
+      // alert(window.height)
+    </script>
+    <script src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="bower_components/angular/angular.js"></script>
+        <script src="scripts/cef5df89.modules.js"></script>
+        <script src="scripts/13ad1687.scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "name": "ng-flow",
+  "version": "2.1.4",
+  "ignore": [
+    "**/.*",
+    "test",
+    "samples",
+    "build",
+    "*.md",
+    "karma.conf.js",
+    "LICENSE",
+    "Gruntfile.js",
+    "package.json",
+    "bower.json"
+  ],
+  "main": "./dist/ng-flow.js",
+  "dependencies": {
+    "angular": "~1",
+    "flow.js": "~2"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1"
+  },
+  "homepage": "https://github.com/flowjs/ng-flow",
+  "_release": "2.1.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.1.4",
+    "commit": "682e4a2e88fff4aeef5532313d4b40e780409f77"
+  },
+  "_source": "git://github.com/flowjs/ng-flow.git",
+  "_target": "~2",
+  "_originalSource": "ng-flow",
+  "_direct": true
+}

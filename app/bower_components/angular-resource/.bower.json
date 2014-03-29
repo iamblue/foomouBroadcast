@@ -1,0 +1,18 @@
+{
+  "name": "angular-resource",
+  "version": "1.2.12-build.2222+sha.c5f69e3",
+  "main": "./angular-resource.js",
+  "dependencies": {
+    "angular": "1.2.12-build.2222+sha.c5f69e3"
+  },
+  "homepage": "https://github.com/angular/bower-angular-resource",
+  "_release": "1.2.12-build.2222+sha.c5f69e3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.2.12-build.2222+sha.c5f69e3",
+    "commit": "e54f77412caa79a6d2c0e26aeab4598699ca923e"
+  },
+  "_source": "git://github.com/angular/bower-angular-resource.git",
+  "_target": "~1.2.0",
+  "_originalSource": "angular-resource"
+}

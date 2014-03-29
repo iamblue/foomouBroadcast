@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<title>css3</title>
+<style>
+* { margin: 0px; padding: 0px; }
+body { background: #b1b1b1; margin: 0px; padding: 0px; font-size: 14px; color: #000; overflow-x: hidden; overflow-y: scroll; }
+.tips { width: 702px; margin: 0 auto; line-height: 24px; padding-top: 10px; }
+.bredcolor { color: #fff; }
+.produter { width: 250px; height: 35px; margin: 0 auto 450px auto; position: relative; z-index: 100; -webkit-perspective: 400px; -moz-perspective: 400px; perspective: 400px; -webkit-perspective-origin: 50% 100%; -moz-perspective-origin: 50% 100%; perspective-origin: 50% 100%; }
+/* produter下所有div的同一设置 */
+.produter div { position: absolute; padding: 10px; -webkit-transform-style: preserve-3d; -moz-transform-style: preserve-3d; transform-style: preserve-3d; top: 100%; left: 0; width: 230px; -webkit-transform-origin: 0 0; -moz-transform-origin: 0 0; transform-origin: 0 0; }
+.produter .odd { background: #ddd; -moz-transform: rotateX(-180deg); -webkit-transform: rotateX(-180deg); -webkit-transition: 1s; -moz-transition: 1s; -o-transition: 1s; transition: 1s; }
+.produter .even { background: #eee; -moz-transform: rotateX(180deg); -webkit-transform: rotateX(180deg); -webkit-transition: 1s; -moz-transition: 1s; -o-transition: 1s; transition: 1s; }
+.produter .first { background: #ddd; -moz-transform: rotateX(-100deg); -webkit-transform: rotateX(-100deg); -webkit-transition: 0.6s; -moz-transition: 0.6s; -o-transition: 0.6s; transition: 0.6s; }
+.produter .last { box-shadow: 0 15px 10px -10px rgba(0,0,0,0.3); border-radius: 0 0 10px 10px; }
+.produter:hover .sub { -moz-transform: rotateX(0deg); -webkit-transform: rotateX(0deg); }
+.produter .sub img { display: block; float: left; padding: 0 10px 10px 0; }
+.produter .sub p { font: normal 12px/15px arial, sans-serif; color: #000; padding: 0; margin: 0; }
+.produter .sub p span { display: block; font: bold 14px/18px arial, sans-serif; color: #ea0; }
+.produter .sub p a { font: normal 12px/15px arial, sans-serif; color: #09c; }
+.produter .sub p a:hover { text-decoration: none; }
+.produter a.main { display: block; font: bold 15px/35px arial, sans-serif; text-align: center; text-decoration: none; color: #fff; background: #069; border-radius: 10px 10px 0 0; position: relative; z-index: 100; }
+</style>
+</head>
+<body>
+<div class="produter"><a class="main" href="#url">天气预报</a>
+  <div class="sub first">
+    <img src="http://ttem.ttedu.org/zygx/UploadFiles_7350/201005/2010051207372141.jpg" alt="" width="100">
+    <p><span>星期一</span><a href="#">多云</a></p>
+    <div class="sub even"><img src="http://ttem.ttedu.org/zygx/UploadFiles_7350/201005/2010051207372141.jpg" alt="" width="100">
+      <p><span>星期二</span><a href="#">多云</a> </p>
+      <div class="sub odd"><img src="http://ttem.ttedu.org/zygx/UploadFiles_7350/201005/2010051207372141.jpg" alt="" width="100">
+        <p><span>星期三</span><a>小雨</a> </p>
+        <div class="sub even"><img src="http://ttem.ttedu.org/zygx/UploadFiles_7350/201005/2010051207372141.jpg" alt="" width="100">
+          <p><span>星期四</span><a>小雨</a></p>
+          <div class="sub odd last"><img src="http://ttem.ttedu.org/zygx/UploadFiles_7350/201005/2010051207372141.jpg" alt="" width="100">
+            <p><span>星期五</span><a href="#">小雪</a>我操，该穿秋裤了小伙伴</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

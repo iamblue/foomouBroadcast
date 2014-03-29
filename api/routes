@@ -1,0 +1,6 @@
+ls.index                          all    /                                
+msg.msg                           all    /msg/post/police                 
+msg.police                        all    /msg/post/police                 
+msg.save                          all    /msg/post/save                   
+youmeb-api-angularjs.jsfile       all    /youmeb/youmeb-api-angular.js    
+youmeb-api-angularjs.minjsfile    all    /youmeb/youmeb-api-angular.min.js
