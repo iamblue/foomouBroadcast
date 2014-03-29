@@ -52,39 +52,77 @@ var bot = new irc.Client(config.server, config.botName, {
   channels: config.channels
 });
 
-var oldmem ;
-var tmp ;
+// var oldmem ;
+var tmp = '';
+var tmpdata = [];
+var l = 0;
+var lastContent = '';
+var lastLocation = '';
+var lastTime = '';
+var repeatDir = function (){
+  setTimeout(function(){
+    // request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {
+    //   l = r.body.total
+    //   tmpdata = r.body.latest
+    //   lastContent = tmpdata[r.body.latest.length-1].content[0]
+    //   lastLocation = tmpdata[r.body.latest.length-1].location
+    //   lastTime = tmpdata[r.body.latest.length-1].time
+    // }) 
+    request.get({url:'https://ethercalc.org/static/proxy/2014-03-29.txt'}, function(e,r,user){
+      var _tmp = r.body.split("\n  • ")
+      var contentreg = /\]/g
+      lastContent = _tmp[_tmp.length-1].split('] ')[1];
+      // console.log(_tmp[_tmp.length-1].split('] ')[1]);
+      lastTime = _tmp[_tmp.length-1].split("• ")[0].replace(/\s/)[0]
+      // console.log(lastTime)
+      lastLocation = _tmp[_tmp.length-1].split("[")[1].split("]")[0]
+    })
+  },2000)  
+}
 
-
+repeatDir();
 io.sockets.on('connection', function (socket) {
   // setTimeout (function() { 
   //   socket.emit('news', { g0v: '1231231'});
   // },1000)
-  setTimeout (function() { 
-    request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {  
-      // console.log(r)
-      oldmem = r.body
-      // console.log(oldmem)
-      if (r.body[0] && r.body[0].content && tmp != r.body[r.body.length-1].content[0]){
-        socket.emit('news', { main: r.body[r.body.length-1].content[0] });          
-        tmp = r.body[r.body.length-1].content[0];
-      }else{
-        if (tmp){
-          console.log(tmp)
-          socket.emit('news', { main: tmp});
-        }else{
-          socket.emit('news', { main: ''});
-        }
-      }
-    })
-   }, 1000);
-  bot.addListener("message", function(from, to, text, msg) {
+  // var repeat = function (){
+  //   setTimeout (function() { 
+  //     request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {  
+  //       // console.log(r)
+  //       var oldmem = r.body.latest
+  //       // console.log(oldmem[0])
+  //       if (oldmem[0] && oldmem[0].content && tmp != oldmem[oldmem.length-1].content[0]){
+  //         tmp = oldmem[oldmem.length-1].content;
+  //         socket.emit('news', { main: tmp , location:oldmem[oldmem.length-1].location, time:oldmem[oldmem.length-1].time});
+  //         // console.log(tmp)
+  //       }else{
+  //         if (tmp != ''){
+  //           // console.log(tmp)
+  //           // socket.emit('news', { main: tmp , location:oldmem[oldmem.length-1].location});
+  //         }else{
+  //           socket.emit('news', { main: ''});
+  //         }
+  //       }
+  //     })
+  //     repeat()
+  //   }, 1000);
+  // }
+  // repeat()
+  var repeat = function(){
+    setTimeout(function(){
+      socket.emit('news', { main: lastContent , location:lastLocation , time:lastTime});
+      repeat()
+    },2000)
+  }
+  repeat()
+ 
+  // bot.addListener("message", function(from, to, text, msg) {
     
-    socket.emit('news', { g0v: from+' : '+text });
-    socket.on('sos', function (data) {
-      socket.broadcast.emit('sos',{p:data.p, msg:data.msg, icon:data.icon});
-    });
-  });
+  //   socket.emit('news', { g0v: from+' : '+text });
+  //   socket.on('sos', function (data) {
+  //     socket.broadcast.emit('sos',{p:data.p, msg:data.msg, icon:data.icon});
+  //   });
+  // });
   // bot.say(channel, who + "...dude...welcome back!");
 });
 
