@@ -68,7 +68,7 @@ var repeatDir = function (){
     //   lastLocation = tmpdata[r.body.latest.length-1].location
     //   lastTime = tmpdata[r.body.latest.length-1].time
     // }) 
-    request.get({url:'https://ethercalc.org/static/proxy/2014-03-29.txt'}, function(e,r,user){
+    request.get({url:'https://ethercalc.org/static/proxy/2014-03-30.txt'}, function(e,r,user){
       var _tmp = r.body.split("\n  • ")
       var contentreg = /\]/g
       lastContent = _tmp[_tmp.length-1].split('] ')[1];
