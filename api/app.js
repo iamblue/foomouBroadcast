@@ -77,7 +77,7 @@ var repeatDir = function (){
       // console.log(lastTime)
       lastLocation = _tmp[_tmp.length-1].split("[")[1].split("]")[0]
     })
-  },30000)  
+  },10000)  
 }
 
 repeatDir();
@@ -112,7 +112,7 @@ io.sockets.on('connection', function (socket) {
     setTimeout(function(){
       socket.emit('news', { main: lastContent , location:lastLocation , time:lastTime});
       repeat()
-    },30000)
+    },5000)
   }
   repeat()
  
