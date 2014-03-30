@@ -141,7 +141,7 @@ io.sockets.on('connection', function (socket) {
         };
         ii++;
         broadcastIn()
-      },1000)
+      },10)
     }
     broadcastIn()
   }
@@ -160,7 +160,7 @@ io.sockets.on('connection', function (socket) {
         };
         i++;
         broadcastOut()
-      },1000)
+      },10)
     }
     broadcastOut()
   }
@@ -171,7 +171,7 @@ io.sockets.on('connection', function (socket) {
   var repeat = function(){
     setTimeout(function(){
       socket.emit('news', { main: lastInContent , location:lastInLocation , time:lastInTime});
-    },5000)
+    },10)
   }
   repeat()
 });
