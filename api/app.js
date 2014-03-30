@@ -100,7 +100,7 @@ var repeatDir = function (){
       var _tmp = r.body.split("\n  • ");
       var _o = _tmp.length;
       var contentreg = /\]/g
-      if (lastInContent != _tmp[_tmp.length-1].split('] ')[1] || lastInContent == ''){
+      if (lastInContent != _tmp[_tmp.length-1].split(']')[1] || lastInContent == ''){
         for (var i = o; i < _o; i++) {
           var _tmpmsg = {}
           _tmpmsg.lastInContent = _tmp[i].split(']')[1];
@@ -117,8 +117,8 @@ var repeatDir = function (){
         o = _tmp.length;
         eventEmitter.emit('sendInMsg');
       }
-      
     })
+    repeatDir()
   },20000)  
 }
 repeatDir();
