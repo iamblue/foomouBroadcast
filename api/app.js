@@ -32,16 +32,20 @@ var app = require('express')()
   , io = require('socket.io').listen(server);
 
 server.listen(8880);
+var redis = require("socket.io/node_modules/redis");
+var RedisStore = require('socket.io/lib/stores/redis'),
+    pub = redis.createClient(),
+    sub = redis.createClient(),
+    cmd = redis.createClient();
+ 
+io.set('store', new RedisStore({
+    redisPub: pub,
+    redisSub: sub,
+    redisClient: cmd
+}));
 
-// app.get('/', function (req, res) {
-//   res.sendfile(__dirname + '/index.html');
-// });
-// var Padnews = require('padnews');
 var irc = require("irc");
 var request = require('request');
-  
-// var pad = new Padnews('sgyfCRGiBZC', 'g0v');
-
 var config = {
   channels: ["#g0v.tw"],
   server: "irc.freenode.net",
@@ -52,7 +56,6 @@ var bot = new irc.Client(config.server, config.botName, {
   channels: config.channels
 });
 
-// var oldmem ;
 var tmp = '';
 var tmpdata = [];
 var l = 0;
@@ -111,7 +114,6 @@ var repeatDir = function (){
             lastInTime = _tmp[i].split("• ")[0].replace(/\s/)[0];
             lastInLocation = _tmp[i].split("[")[1].split("]")[0];      
           }
-          // console.log(_tmpmsg)
           lastInQueue.push(_tmpmsg);
         };
         o = _tmp.length;
@@ -130,41 +132,11 @@ var eventEmitter = new events.EventEmitter();
 
  
 io.sockets.on('connection', function (socket) {
-  // setTimeout (function() { 
-  //   socket.emit('news', { g0v: '1231231'});
-  // },1000)
-  // var repeat = function (){
-  //   setTimeout (function() { 
-  //     request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {  
-  //       // console.log(r)
-  //       var oldmem = r.body.latest
-  //       // console.log(oldmem[0])
-  //       if (oldmem[0] && oldmem[0].content && tmp != oldmem[oldmem.length-1].content[0]){
-  //         tmp = oldmem[oldmem.length-1].content;
-  //         socket.emit('news', { main: tmp , location:oldmem[oldmem.length-1].location, time:oldmem[oldmem.length-1].time});
-  //         // console.log(tmp)
-  //       }else{
-  //         if (tmp != ''){
-  //           // console.log(tmp)
-  //           // socket.emit('news', { main: tmp , location:oldmem[oldmem.length-1].location});
-  //         }else{
-  //           socket.emit('news', { main: ''});
-  //         }
-  //       }
-  //     })
-  //     repeat()
-  //   }, 1000);
-  // }
-  // repeat()
-  // 
-  // 
-   
-
+  
   var sendInMsg = function sendInMsg(){
     var ii = 0;
     var broadcastIn = function(){
       setTimeout(function(){
-        // console.log(lastInQueue)
         if (lastInQueue.length != ii){
           if(ii<lastInQueue.length){
             socket.emit('news', { main: lastInQueue[ii].lastInContent , location:lastInQueue[ii].lastInLocation , time:lastInQueue[ii].lastInTime});
@@ -178,6 +150,7 @@ io.sockets.on('connection', function (socket) {
     }
     broadcastIn()
   }
+
   var sendOutMsg = function sendOutMsg(){
     var i = 0;
     var broadcastOut = function(){
@@ -203,18 +176,9 @@ io.sockets.on('connection', function (socket) {
   var repeat = function(){
     setTimeout(function(){
       socket.emit('news', { main: lastInContent , location:lastInLocation , time:lastInTime});
-      // repeat()
     },5000)
   }
   repeat()
-  // bot.addListener("message", function(from, to, text, msg) {
-    
-  //   socket.emit('news', { g0v: from+' : '+text });
-  //   socket.on('sos', function (data) {
-  //     socket.broadcast.emit('sos',{p:data.p, msg:data.msg, icon:data.icon});
-  //   });
-  // });
-  // bot.say(channel, who + "...dude...welcome back!");
 });
 
 
