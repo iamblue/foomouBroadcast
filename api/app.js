@@ -32,20 +32,11 @@ var app = require('express')()
   , io = require('socket.io').listen(server);
 
 server.listen(8880);
-var redis = require("socket.io/node_modules/redis");
-var RedisStore = require('socket.io/lib/stores/redis'),
-    pub = redis.createClient(),
-    sub = redis.createClient(),
-    cmd = redis.createClient();
- 
-io.set('store', new RedisStore({
-    redisPub: pub,
-    redisSub: sub,
-    redisClient: cmd
-}));
-
 var irc = require("irc");
 var request = require('request');
+  
+// var pad = new Padnews('sgyfCRGiBZC', 'g0v');
+
 var config = {
   channels: ["#g0v.tw"],
   server: "irc.freenode.net",
@@ -101,6 +92,8 @@ var repeatDir = function (){
     }) 
     request.get({url:'https://ethercalc.org/static/proxy/2014-03-30.txt'}, function(e,r,user){
       if (r){
+
+
         var _tmp = r.body.split("\n  • ");
         var _o = _tmp.length;
         var contentreg = /\]/g
