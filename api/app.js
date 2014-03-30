@@ -100,24 +100,26 @@ var repeatDir = function (){
       }
     }) 
     request.get({url:'https://ethercalc.org/static/proxy/2014-03-30.txt'}, function(e,r,user){
-      var _tmp = r.body.split("\n  • ");
-      var _o = _tmp.length;
-      var contentreg = /\]/g
-      if (lastInContent != _tmp[_tmp.length-1].split(']')[1] || lastInContent == ''){
-        for (var i = o; i < _o; i++) {
-          var _tmpmsg = {}
-          _tmpmsg.lastInContent = _tmp[i].split(']')[1];
-          _tmpmsg.lastInTime = _tmp[i].split("• ")[0].replace(/\s/)[0];
-          _tmpmsg.lastInLocation = _tmp[i].split("[")[1].split("]")[0];      
-          if (i == (_o -1)){
-            lastInContent = _tmp[i].split(']')[1];
-            lastInTime = _tmp[i].split("• ")[0].replace(/\s/)[0];
-            lastInLocation = _tmp[i].split("[")[1].split("]")[0];      
-          }
-          lastInQueue.push(_tmpmsg);
-        };
-        o = _tmp.length;
-        eventEmitter.emit('sendInMsg');
+      if (r){
+        var _tmp = r.body.split("\n  • ");
+        var _o = _tmp.length;
+        var contentreg = /\]/g
+        if (lastInContent != _tmp[_tmp.length-1].split(']')[1] || lastInContent == ''){
+          for (var i = o; i < _o; i++) {
+            var _tmpmsg = {}
+            _tmpmsg.lastInContent = _tmp[i].split(']')[1];
+            _tmpmsg.lastInTime = _tmp[i].split("• ")[0].replace(/\s/)[0];
+            _tmpmsg.lastInLocation = _tmp[i].split("[")[1].split("]")[0];      
+            if (i == (_o -1)){
+              lastInContent = _tmp[i].split(']')[1];
+              lastInTime = _tmp[i].split("• ")[0].replace(/\s/)[0];
+              lastInLocation = _tmp[i].split("[")[1].split("]")[0];      
+            }
+            lastInQueue.push(_tmpmsg);
+          };
+          o = _tmp.length;
+          eventEmitter.emit('sendInMsg');
+        }
       }
     })
     repeatDir()
