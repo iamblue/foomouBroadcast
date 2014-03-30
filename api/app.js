@@ -106,6 +106,11 @@ var repeatDir = function (){
           _tmpmsg.lastInContent = _tmp[i].split(']')[1];
           _tmpmsg.lastInTime = _tmp[i].split("• ")[0].replace(/\s/)[0];
           _tmpmsg.lastInLocation = _tmp[i].split("[")[1].split("]")[0];      
+          if (i == (_o -1)){
+            lastInContent = _tmp[i].split(']')[1];
+            lastInTime = _tmp[i].split("• ")[0].replace(/\s/)[0];
+            lastInLocation = _tmp[i].split("[")[1].split("]")[0];      
+          }
           // console.log(_tmpmsg)
           lastInQueue.push(_tmpmsg);
         };
@@ -193,6 +198,7 @@ io.sockets.on('connection', function (socket) {
   }
   eventEmitter.on('sendInMsg', sendInMsg);
   eventEmitter.on('sendOutMsg', sendOutMsg);
+
   eventEmitter.emit('sendInMsg');
   var repeat = function(){
     setTimeout(function(){
