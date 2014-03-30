@@ -28,8 +28,20 @@ module.exports = function (done) {
 
 
 var app = require('express')()
-  , server = require('http').createServer(app)
+  , server = require('http').createServer(app),
+  redis = require("socket.io/node_modules/redis")
   , io = require('socket.io').listen(server);
+
+var RedisStore = require('socket.io/lib/stores/redis'),
+    pub = redis.createClient(),
+    sub = redis.createClient(),
+    cmd = redis.createClient();
+ 
+io.set('store', new RedisStore({
+    redisPub: pub,
+    redisSub: sub,
+    redisClient: cmd
+}));
 
 server.listen(8880);
 var irc = require("irc");
