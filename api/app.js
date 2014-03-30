@@ -56,31 +56,74 @@ var bot = new irc.Client(config.server, config.botName, {
 var tmp = '';
 var tmpdata = [];
 var l = 0;
-var lastContent = '';
-var lastLocation = '';
-var lastTime = '';
+var o = 0;
+var lastInContent = '';
+var lastInLocation = '';
+var lastInTime = '';
+var lastOutContent = '';
+var lastOutLocation = '';
+var lastOutTime = '';
+
+var lastOutQueue = []
+var lastInQueue = []
+
 var repeatDir = function (){
   setTimeout(function(){
-    // request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {
-    //   l = r.body.total
-    //   tmpdata = r.body.latest
-    //   lastContent = tmpdata[r.body.latest.length-1].content[0]
-    //   lastLocation = tmpdata[r.body.latest.length-1].location
-    //   lastTime = tmpdata[r.body.latest.length-1].time
-    // }) 
-    request.get({url:'https://ethercalc.org/static/proxy/2014-03-30.txt'}, function(e,r,user){
-      var _tmp = r.body.split("\n  • ")
-      var contentreg = /\]/g
-      lastContent = _tmp[_tmp.length-1].split('] ')[1];
-      // console.log(_tmp[_tmp.length-1].split('] ')[1]);
-      lastTime = _tmp[_tmp.length-1].split("• ")[0].replace(/\s/)[0]
-      // console.log(lastTime)
-      lastLocation = _tmp[_tmp.length-1].split("[")[1].split("]")[0]
-    })
-  },10000)  
-}
+    request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {
+      if (r){
+        var _l = r.body.latest.length
+        tmpdata = r.body.latest
 
+        if(lastOutContent != tmpdata[r.body.latest.length-1].content[0] || lastOutContent == ''){
+          for (var i = l; i < _l; i++) {
+            var _tmpmsg = {}
+
+            _tmpmsg.lastOutLocation = tmpdata[i].location
+            _tmpmsg.lastOutTime = tmpdata[i].time      
+            if (tmpdata[i].content.length != 1){
+              for (var _i = 0; _i < tmpdata[i].content.length; _i++) {
+                _tmpmsg.lastOutContent = tmpdata[i].content[_i]        
+                // console.log(_tmpmsg);
+                lastOutQueue.push(_tmpmsg);
+              };
+            }else{
+              _tmpmsg.lastOutContent = tmpdata[i].content[0]        
+              lastOutQueue.push(_tmpmsg);
+            }
+          };
+          l = r.body.latest.length;
+          eventEmitter.emit('sendOutMsg');
+        }
+      }
+    }) 
+    request.get({url:'https://ethercalc.org/static/proxy/2014-03-30.txt'}, function(e,r,user){
+      var _tmp = r.body.split("\n  • ");
+      var _o = _tmp.length;
+      var contentreg = /\]/g
+      if (lastInContent != _tmp[_tmp.length-1].split('] ')[1] || lastInContent == ''){
+        for (var i = o; i < _o; i++) {
+          var _tmpmsg = {}
+          _tmpmsg.lastInContent = _tmp[i].split(']')[1];
+          _tmpmsg.lastInTime = _tmp[i].split("• ")[0].replace(/\s/)[0];
+          _tmpmsg.lastInLocation = _tmp[i].split("[")[1].split("]")[0];      
+          // console.log(_tmpmsg)
+          lastInQueue.push(_tmpmsg);
+        };
+        o = _tmp.length;
+        eventEmitter.emit('sendInMsg');
+      }
+      
+    })
+  },20000)  
+}
 repeatDir();
+
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
+  
+
+
+ 
 io.sockets.on('connection', function (socket) {
   // setTimeout (function() { 
   //   socket.emit('news', { g0v: '1231231'});
@@ -108,14 +151,56 @@ io.sockets.on('connection', function (socket) {
   //   }, 1000);
   // }
   // repeat()
+  // 
+  // 
+   
+
+  var sendInMsg = function sendInMsg(){
+    var ii = 0;
+    var broadcastIn = function(){
+      setTimeout(function(){
+        // console.log(lastInQueue)
+        if (lastInQueue.length != ii){
+          if(ii<lastInQueue.length){
+            socket.emit('news', { main: lastInQueue[ii].lastInContent , location:lastInQueue[ii].lastInLocation , time:lastInQueue[ii].lastInTime});
+          }
+        }else{
+          lastInQueue.length = 0
+        };
+        ii++;
+        broadcastIn()
+      },1000)
+    }
+    broadcastIn()
+  }
+  var sendOutMsg = function sendOutMsg(){
+    var i = 0;
+    var broadcastOut = function(){
+      setTimeout(function(){
+        if (lastOutQueue.length != i){
+          // console.log(lastOutQueue[i].lastOutContent);
+          if (i < lastOutQueue.length){
+            socket.emit('news', { main: lastOutQueue[i].lastOutContent , location:lastOutQueue[i].lastOutLocation , time:lastOutQueue[i].lastOutTime});
+          }
+        }else{
+          lastOutQueue.length = 0;
+        };
+        i++;
+        broadcastOut()
+      },1000)
+    }
+    broadcastOut()
+  }
+  eventEmitter.on('sendInMsg', sendInMsg);
+  eventEmitter.on('sendOutMsg', sendOutMsg);
+  eventEmitter.emit('sendInMsg');
   var repeat = function(){
     setTimeout(function(){
-      socket.emit('news', { main: lastContent , location:lastLocation , time:lastTime});
-      repeat()
+      socket.emit('news', { main: lastInContent , location:lastInLocation , time:lastInTime});
+      // repeat()
     },5000)
   }
   repeat()
- 
   // bot.addListener("message", function(from, to, text, msg) {
     
   //   socket.emit('news', { g0v: from+' : '+text });
