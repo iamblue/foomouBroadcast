@@ -102,7 +102,7 @@ var repeatDir = function (){
         }
       }
     }) 
-    request.get({url:'https://ethercalc.org/static/proxy/2014-03-31.txt'}, function(e,r,user){
+    request.get({url:'https://ethercalc.org/static/proxy/2014-04-01.txt'}, function(e,r,user){
       if (r){
 
 
