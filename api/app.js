@@ -1,50 +1,28 @@
-'use strict';
+var cluster = require('cluster');
+var http = require('http');
+var numCPUs = require('os').cpus().length;
 
-var path = require('path');
+if (cluster.isMaster) {
+  // Fork workers.
+  for (var i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+} else {
+  var sio = require('socket.io')
+  , RedisStore = sio.RedisStore
+  , io = sio.listen(8880);
 
-module.exports = function (done) {
+  // Somehow pass this information to the workers
+  io.set('store', new RedisStore);
 
-  this.express(function (app, express) {
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.use(express.favicon());
-     app.use(function(req, res, next) {
-      res.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.header('Access-Control-Allow-Credentials', true);
-      res.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
-      return next();
-    });
-    app.use(express.logger('dev'));
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(app.router);
-  });
-
-  this.routes();
-
-  done();
-};
-
-
-var app = require('express')()
-  , server = require('http').createServer(app),
-  redis = require("socket.io/node_modules/redis")
-  , io = require('socket.io').listen(server);
-
-var RedisStore = require('socket.io/lib/stores/redis'),
-    pub = redis.createClient(),
-    sub = redis.createClient(),
-    cmd = redis.createClient();
- 
-io.set('store', new RedisStore({
-    redisPub: pub,
-    redisSub: sub,
-    redisClient: cmd
-}));
-
-server.listen(8880);
-var irc = require("irc");
+  // Do the work here
+  // io.sockets.on('connection', function (socket) {
+  //   socket.on('chat', function (data) {
+  //     socket.broadcast.emit('chat', data);
+  //   })
+  // });
+  // server.listen(8880);
+  var irc = require("irc");
 var request = require('request');
   
 // var pad = new Padnews('sgyfCRGiBZC', 'g0v');
@@ -104,8 +82,6 @@ var repeatDir = function (){
     }) 
     request.get({url:'https://ethercalc.org/static/proxy/2014-04-01.txt'}, function(e,r,user){
       if (r){
-
-
         var _tmp = r.body.split("\n  • ");
         var _o = _tmp.length;
         var contentreg = /\]/g
@@ -140,20 +116,35 @@ var eventEmitter = new events.EventEmitter();
  
 io.sockets.on('connection', function (socket) {
   
-  var sendInMsg = function sendInMsg(){
+  var sendInMsg = function (){
     var ii = 0;
     var broadcastIn = function(){
-      setTimeout(function(){
-        if (lastInQueue.length != ii){
-          if(ii<lastInQueue.length){
-            socket.emit('news', { main: lastInQueue[ii].lastInContent , location:lastInQueue[ii].lastInLocation , time:lastInQueue[ii].lastInTime});
-          }
-        }else{
-          lastInQueue.length = 0
-        };
-        ii++;
-        broadcastIn()
-      },10)
+      if (lastInQueue.length <= 10){
+        setTimeout(function(){
+          if (lastInQueue.length != ii){
+            if(ii<lastInQueue.length){
+              socket.emit('news', { main: lastInQueue[ii].lastInContent , location:lastInQueue[ii].lastInLocation , time:lastInQueue[ii].lastInTime});
+            }
+          }else{
+            lastInQueue.length = 0
+          };
+          ii++;
+          broadcastIn()
+        },5000)
+      }else{
+        var main = setTimeout(function(){
+          if (lastInQueue.length != ii){
+            if(ii<lastInQueue.length){
+              socket.emit('news', { main: lastInQueue[ii].lastInContent , location:lastInQueue[ii].lastInLocation , time:lastInQueue[ii].lastInTime});
+            }
+          }else{
+            lastInQueue.length = 0
+            clearTimeout(main);
+          };
+          ii++;
+          broadcastIn()
+        },10)
+      }
     }
     broadcastIn()
   }
@@ -161,18 +152,35 @@ io.sockets.on('connection', function (socket) {
   var sendOutMsg = function sendOutMsg(){
     var i = 0;
     var broadcastOut = function(){
-      setTimeout(function(){
-        if (lastOutQueue.length != i){
-          // console.log(lastOutQueue[i].lastOutContent);
-          if (i < lastOutQueue.length){
-            socket.emit('news', { main: lastOutQueue[i].lastOutContent , location:lastOutQueue[i].lastOutLocation , time:lastOutQueue[i].lastOutTime});
-          }
-        }else{
-          lastOutQueue.length = 0;
-        };
-        i++;
-        broadcastOut()
-      },10)
+      if (lastOutQueue.length <= 10){
+        setTimeout(function(){
+          if (lastOutQueue.length != i){
+            // console.log(lastOutQueue[i].lastOutContent);
+            if (i < lastOutQueue.length){
+              socket.emit('news', { main: lastOutQueue[i].lastOutContent , location:lastOutQueue[i].lastOutLocation , time:lastOutQueue[i].lastOutTime});
+            }
+          }else{
+            lastOutQueue.length = 0;
+          };
+          i++;
+          broadcastOut()
+        },5000)  
+      }else{
+        var main = setTimeout(function(){
+          if (lastOutQueue.length != i){
+            // console.log(lastOutQueue[i].lastOutContent);
+            if (i < lastOutQueue.length){
+              socket.emit('news', { main: lastOutQueue[i].lastOutContent , location:lastOutQueue[i].lastOutLocation , time:lastOutQueue[i].lastOutTime});
+            }
+          }else{
+            lastOutQueue.length = 0;
+            clearTimeout(main)
+          };
+          i++;
+          broadcastOut()
+        },10)  
+      }
+      
     }
     broadcastOut()
   }
@@ -180,13 +188,14 @@ io.sockets.on('connection', function (socket) {
   eventEmitter.on('sendOutMsg', sendOutMsg);
 
   eventEmitter.emit('sendInMsg');
-  var repeat = function(){
-    setTimeout(function(){
-      socket.emit('news', { main: lastInContent , location:lastInLocation , time:lastInTime});
-    },10)
-  }
-  repeat()
-});
+  socket.emit('news', { main: lastInContent , location:lastInLocation , time:lastInTime});
+  // repeat()
+})
+
+
+
+
+}
 
 
  
