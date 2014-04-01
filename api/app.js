@@ -165,7 +165,7 @@ io.sockets.on('connection', function (socket) {
           }else{
             // lastOutQueue.length = 0;
           };
-          i++;
+          iii++;
           broadcastOut()
         },1000)  
       }else{
