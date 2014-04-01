@@ -57,7 +57,7 @@ var repeatDir = function (){
     lastOutQueue.length = 0
 
     request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {
-      if (r){
+      console.log(r)
         var _l = r.body.latest.length
         tmpdata = r.body.latest
 
@@ -81,7 +81,7 @@ var repeatDir = function (){
           l = r.body.latest.length;
           eventEmitter.emit('sendOutMsg');
         }
-      }
+      
     }) 
     request.get({url:'https://ethercalc.org/static/proxy/2014-04-01.txt'}, function(e,r,user){
       if (r){
