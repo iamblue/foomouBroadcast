@@ -53,6 +53,9 @@ var lastInQueue = []
 
 var repeatDir = function (){
   setTimeout(function(){
+    lastInQueue.length = 0
+    lastOutQueue.length = 0
+
     request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {
       if (r){
         var _l = r.body.latest.length
