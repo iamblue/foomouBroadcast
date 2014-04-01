@@ -123,14 +123,14 @@ io.sockets.on('connection', function (socket) {
         setTimeout(function(){
           if (lastInQueue.length != ii){
             if(ii<lastInQueue.length){
-              socket.broadcast.emit('news', { main: lastInQueue[ii].lastInContent , location:lastInQueue[ii].lastInLocation , time:lastInQueue[ii].lastInTime});
+              socket.emit('news', { main: lastInQueue[ii].lastInContent , location:lastInQueue[ii].lastInLocation , time:lastInQueue[ii].lastInTime});
             }
           }else{
-            lastInQueue.length = 0
+            // lastInQueue.length
           };
           ii++;
           broadcastIn()
-        },1000)
+        },000)
       }else{
         var main = setTimeout(function(){
           if (lastInQueue.length != ii){
@@ -157,10 +157,10 @@ io.sockets.on('connection', function (socket) {
           if (lastOutQueue.length != i){
             // console.log(lastOutQueue[i].lastOutContent);
             if (i < lastOutQueue.length){
-              socket.broadcast.emit('news', { main: lastOutQueue[i].lastOutContent , location:lastOutQueue[i].lastOutLocation , time:lastOutQueue[i].lastOutTime});
+              socket.emit('news', { main: lastOutQueue[i].lastOutContent , location:lastOutQueue[i].lastOutLocation , time:lastOutQueue[i].lastOutTime});
             }
           }else{
-            lastOutQueue.length = 0;
+            // lastOutQueue.length = 0;
           };
           i++;
           broadcastOut()
