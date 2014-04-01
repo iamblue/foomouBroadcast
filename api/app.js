@@ -57,7 +57,7 @@ var repeatDir = function (){
     lastOutQueue.length = 0
 
     request.get({url:'http://congress-text-live.herokuapp.com/json/', json:true}, function (e, r, user) {
-      console.log(r)
+      if(r){
         var _l = r.body.latest.length
         tmpdata = r.body.latest
 
@@ -67,10 +67,9 @@ var repeatDir = function (){
 
             _tmpmsg.lastOutLocation = tmpdata[i].location
             _tmpmsg.lastOutTime = tmpdata[i].time      
-            if (tmpdata[i].content.length != 1){
+            if (tmpdata[i].content.length > 1){
               for (var _i = 0; _i < tmpdata[i].content.length; _i++) {
                 _tmpmsg.lastOutContent = tmpdata[i].content[_i]        
-                // console.log(_tmpmsg);
                 lastOutQueue.push(_tmpmsg);
               };
             }else{
@@ -81,7 +80,7 @@ var repeatDir = function (){
           l = r.body.latest.length;
           eventEmitter.emit('sendOutMsg');
         }
-      
+      }
     }) 
     request.get({url:'https://ethercalc.org/static/proxy/2014-04-01.txt'}, function(e,r,user){
       if (r){
