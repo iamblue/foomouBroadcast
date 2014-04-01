@@ -179,7 +179,7 @@ io.sockets.on('connection', function (socket) {
             lastOutQueue.length = 0;
             clearTimeout(mainOut);
           };
-          i++;
+          iii++;
           broadcastOut()
         },10)  
       }
