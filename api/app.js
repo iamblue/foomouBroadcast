@@ -64,18 +64,12 @@ var repeatDir = function (){
         if(lastOutContent != tmpdata[r.body.latest.length-1].content[0] || lastOutContent == ''){
           for (var i = l; i < _l; i++) {
             var _tmpmsg = {}
-
             _tmpmsg.lastOutLocation = tmpdata[i].location
             _tmpmsg.lastOutTime = tmpdata[i].time      
-            if (tmpdata[i].content.length > 1){
-              for (var _i = 0; _i < tmpdata[i].content.length; _i++) {
-                _tmpmsg.lastOutContent = tmpdata[i].content[_i]        
-                lastOutQueue.push(_tmpmsg);
-              };
-            }else{
-              _tmpmsg.lastOutContent = tmpdata[i].content[0]        
+            for (var _i = 0; _i < tmpdata[i].content.length; _i++) {
+              _tmpmsg.lastOutContent = tmpdata[i].content[_i]        
               lastOutQueue.push(_tmpmsg);
-            }
+            };
           };
           l = r.body.latest.length;
           eventEmitter.emit('sendOutMsg');
