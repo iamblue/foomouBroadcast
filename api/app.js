@@ -133,7 +133,7 @@ io.sockets.on('connection', function (socket) {
           };
           ii++;
           broadcastIn()
-        },000)
+        },1000)
       }else{
         var main = setTimeout(function(){
           if (lastInQueue.length != ii){
@@ -153,14 +153,14 @@ io.sockets.on('connection', function (socket) {
   }
 
   var sendOutMsg = function sendOutMsg(){
-    var i = 0;
+    var iii = 0;
     var broadcastOut = function(){
       if (lastOutQueue.length <= 10){
         setTimeout(function(){
-          if (lastOutQueue.length != i){
+          if (lastOutQueue.length != iii){
             // console.log(lastOutQueue[i].lastOutContent);
-            if (i < lastOutQueue.length){
-              socket.emit('news', { main: lastOutQueue[i].lastOutContent , location:lastOutQueue[i].lastOutLocation , time:lastOutQueue[i].lastOutTime});
+            if (iii < lastOutQueue.length){
+              socket.emit('news', { main: lastOutQueue[iii].lastOutContent , location:lastOutQueue[iii].lastOutLocation , time:lastOutQueue[iii].lastOutTime});
             }
           }else{
             // lastOutQueue.length = 0;
@@ -169,15 +169,15 @@ io.sockets.on('connection', function (socket) {
           broadcastOut()
         },1000)  
       }else{
-        var main = setTimeout(function(){
-          if (lastOutQueue.length != i){
+        var mainOut = setTimeout(function(){
+          if (lastOutQueue.length != iii){
             // console.log(lastOutQueue[i].lastOutContent);
-            if (i < lastOutQueue.length){
-              socket.emit('news', { main: lastOutQueue[i].lastOutContent , location:lastOutQueue[i].lastOutLocation , time:lastOutQueue[i].lastOutTime});
+            if (iii < lastOutQueue.length){
+              socket.emit('news', { main: lastOutQueue[iii].lastOutContent , location:lastOutQueue[iii].lastOutLocation , time:lastOutQueue[iii].lastOutTime});
             }
           }else{
             lastOutQueue.length = 0;
-            clearTimeout(main)
+            clearTimeout(mainOut);
           };
           i++;
           broadcastOut()
