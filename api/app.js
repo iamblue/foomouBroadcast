@@ -1,6 +1,7 @@
 var cluster = require('cluster');
 var http = require('http');
 var numCPUs = require('os').cpus().length;
+var fs = require('fs');
 
 if (cluster.isMaster) {
   // Fork workers.
@@ -108,10 +109,32 @@ var events = require('events');
 var eventEmitter = new events.EventEmitter();
   
 
+// eventEmitter.on('broadcast',broadcast);
+// var broadcast = function (){
 
+// }
  
+
 io.sockets.on('connection', function (socket) {
-  
+  socket.on('broadcast', function (data) {
+    socket.broadcast.emit('news', { main: data.content ,location: data.location,time:2});
+    var content;
+    fs.readFile('./20140404.txt', function read(err, d) {
+        if (err) {
+            throw err;
+        }
+        content = d;
+        fs.writeFile("./20140404.txt", content+ "\n ["+ data.location+" ] "+ data.content, function(err) {
+            if(err) {
+                console.log(err);
+            } else {
+                console.log("The file was saved!");
+            }
+        }); 
+    });
+  });
+
+
   var sendInMsg = function (){
     var ii = 0;
     var broadcastIn = function(){
