@@ -71,7 +71,20 @@ const appFrameDirective = ->
       elem.bind 'click' !->
         
   }
-angular.module \mindmineApp
+const sendDirective = ->
+  {
+    retrict : \A
+    link: (scope, element, attr) !->
+      element.bind "keydown keypress", (event)->
+        if event.which == 13 
+          scope.$apply ->
+            scope.mySocket.emit 'broadcast', {content:scope.livetext,location:scope.location}
+            scope.livetext = ''
+          event.preventDefault!    
+  }
+
+angular.module \textbroadcast
+  .directive \send sendDirective
   .directive \hoverAuthorCircle hoverAuthorCircleDirective
   .directive \appFrame appFrameDirective
   .directive \product productDirective

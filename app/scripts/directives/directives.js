@@ -1,4 +1,4 @@
-var productDirective, detectWindowDirective, bottomChooseDirective, hoverAuthorCircleDirective, appFrameDirective;
+var productDirective, detectWindowDirective, bottomChooseDirective, hoverAuthorCircleDirective, appFrameDirective, sendDirective;
 productDirective = function($timeout){
   return {
     retrict: 'A',
@@ -65,4 +65,23 @@ appFrameDirective = function(){
     }
   };
 };
-angular.module('mindmineApp').directive('hoverAuthorCircle', hoverAuthorCircleDirective).directive('appFrame', appFrameDirective).directive('product', productDirective).directive('detectwindow', detectWindowDirective).directive('bottomChoose', bottomChooseDirective);
+sendDirective = function(){
+  return {
+    retrict: 'A',
+    link: function(scope, element, attr){
+      element.bind("keydown keypress", function(event){
+        if (event.which === 13) {
+          scope.$apply(function(){
+            scope.mySocket.emit('broadcast', {
+              content: scope.livetext,
+              location: scope.location
+            });
+            return scope.livetext = '';
+          });
+          return event.preventDefault();
+        }
+      });
+    }
+  };
+};
+angular.module('textbroadcast').directive('send', sendDirective).directive('hoverAuthorCircle', hoverAuthorCircleDirective).directive('appFrame', appFrameDirective).directive('product', productDirective).directive('detectwindow', detectWindowDirective).directive('bottomChoose', bottomChooseDirective);
