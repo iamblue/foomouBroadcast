@@ -1,5 +1,5 @@
 angular.module('textbroadcast').factory('mySocket', function(){
-  return io.connect('http://localhost:8880');
+  return io.connect('http://foomou.iamblue.me:8880');
 }).controller('broadcast', ['$scope', 'mySocket'].concat(function($scope, mySocket){
   $scope.mySocket = mySocket;
   return $scope.send = function(){
