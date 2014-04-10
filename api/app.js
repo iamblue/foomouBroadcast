@@ -77,7 +77,7 @@ var repeatDir = function (){
         }
       
     }) 
-    request.get({url:'https://ethercalc.org/static/proxy/2014-04-05.txt'}, function(e,r,user){
+    request.get({url:'https://ethercalc.org/static/proxy/2014-04-10.txt'}, function(e,r,user){
       if (r){
         var _tmp = r.body.split("\n  • ");
         var _o = _tmp.length;
